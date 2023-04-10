@@ -12,7 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null);
 
   useEffect(() => {
     console.log("effect");
@@ -37,13 +37,26 @@ const App = () => {
 
     const oldPerson = persons.find((i) => i.name === newName);
     if (oldPerson) {
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        personService.update(oldPerson.id, personObject).then((updatedPerson) => {
-          setPersons(persons.map(person => person.id !== oldPerson.id ? person : updatedPerson));
-          setNewName("");
-          setNewNumber("");
-          showNotification("Updated " + newName);
-        });
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        personService
+          .update(oldPerson.id, personObject)
+          .then((updatedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== oldPerson.id ? person : updatedPerson
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+            showNotification("Updated " + newName);
+          }).catch(error => {
+            showError(oldPerson.name + " was already removed");
+            setPersons(persons.filter(n => n.id !== oldPerson.id))
+          })
       }
       return;
     }
@@ -80,16 +93,23 @@ const App = () => {
   };
 
   const showNotification = (message) => {
-    setNotificationMessage(message);
+    setNotificationMessage({ message, className: "notification" });
     setTimeout(() => {
-      setNotificationMessage(null)
-    }, 5000)
-  }
+      setNotificationMessage(null);
+    }, 5000);
+  };
+
+  const showError = (message) => {
+    setNotificationMessage({ message, className: "error" });
+    setTimeout(() => {
+      setNotificationMessage(null);
+    }, 5000);
+  };
 
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={notificationMessage} />
+      <Notification messageData={notificationMessage} />
       <Filter filter={filter} onFilterChanged={onFilterChanged} />
       <h3>add a new</h3>
       <PersonForm
