@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 
 import personService from "./services/persons";
 
@@ -11,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
     console.log("effect");
@@ -40,6 +42,7 @@ const App = () => {
           setPersons(persons.map(person => person.id !== oldPerson.id ? person : updatedPerson));
           setNewName("");
           setNewNumber("");
+          showNotification("Updated " + newName);
         });
       }
       return;
@@ -49,6 +52,7 @@ const App = () => {
       setPersons(persons.concat(newPerson));
       setNewName("");
       setNewNumber("");
+      showNotification("Added " + newName);
     });
   };
 
@@ -68,15 +72,24 @@ const App = () => {
     if (window.confirm(`Delete ${name}?`)) {
       personService.remove(id).then(() => {
         personService.getAll().then((persons) => {
+          showNotification("Removed " + name);
           setPersons(persons);
         });
       });
     }
   };
 
+  const showNotification = (message) => {
+    setNotificationMessage(message);
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
+  }
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={notificationMessage} />
       <Filter filter={filter} onFilterChanged={onFilterChanged} />
       <h3>add a new</h3>
       <PersonForm
