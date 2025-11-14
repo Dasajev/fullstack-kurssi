@@ -1,27 +1,30 @@
-const Country = ({ countriesToShow }) => {
+const Country = ({ countriesToShow, setSelectedCountry }) => {
   if (!countriesToShow.length) return null;
   if (countriesToShow.length > 10) {
     return <div>Too many matches, specify another filter</div>;
   }
   if (countriesToShow.length > 1) {
     return (
-    <ul>
+      <ul>
         {countriesToShow.map((country) => (
-            <li>{country.name.common}</li>
+          <li>
+            {country.name.common}
+            <button onClick={() => setSelectedCountry(country)}>Select</button>
+          </li>
         ))}
-    </ul>
+      </ul>
     );
   }
   const country = countriesToShow[0];
   return (
     <div>
       <h1>{country.name.common}</h1>
-      capital {country.capital[0]} <br/>
+      capital {country.capital[0]} <br />
       area {country.area}
       <h3>Languages:</h3>
       <ul>
         {Object.values(country.languages).map((language) => (
-            <li>{language}</li>
+          <li>{language}</li>
         ))}
       </ul>
       <img src={country.flags.png} alt="Flag" />
