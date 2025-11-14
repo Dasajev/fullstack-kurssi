@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "https://restcountries.com/v3.1/all";
+const baseUrl = "https://studies.cs.helsinki.fi/restcountries/api/all";
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
@@ -7,7 +7,8 @@ const getAll = async () => {
 };
 
 const countries = {
-    getAll,  
-  };
-  
-  export default countries;
+  getAll,
+};
+
+export default countries;
+
