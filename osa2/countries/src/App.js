@@ -11,7 +11,6 @@ function App() {
   useEffect(() => {
     console.log("effect");
     countryServices.getAll().then((countries) => {
-      console.log(countries);
       setCountries(countries);
     });
   }, []);

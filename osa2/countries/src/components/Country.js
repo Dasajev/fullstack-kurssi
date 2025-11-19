@@ -1,3 +1,4 @@
+import Weather from "./Weather";
 const Country = ({ countriesToShow, setSelectedCountry }) => {
   if (!countriesToShow.length) return null;
   if (countriesToShow.length > 10) {
@@ -28,6 +29,7 @@ const Country = ({ countriesToShow, setSelectedCountry }) => {
         ))}
       </ul>
       <img src={country.flags.png} alt="Flag" />
+      <Weather city={country.capital[0]} />
     </div>
   );
 };
